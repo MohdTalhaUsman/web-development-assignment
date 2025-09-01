@@ -11,8 +11,14 @@ export async function POST(request) {
         if (done) break;
         chunks.push(value);
       }
+
+      console.log(`${process.cwd()}/${request.headers.get("File-Name")}`);
+
       await writeFile(
-        `./public/schoolImages/${request.headers.get("File-Name")}`,
+        // `./public/schoolImages/${request.headers.get("File-Name")}`,
+        `${process.cwd()}/public/schoolImages/${request.headers.get(
+          "File-Name"
+        )}`,
         chunks
       );
     } else {
