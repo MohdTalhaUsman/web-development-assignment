@@ -22,7 +22,7 @@ export async function POST(request) {
 
       await writeFile(
         // `./public/schoolImages/${request.headers.get("File-Name")}`,
-        `/schoolImages/${request.headers.get("File-Name")}`,
+        `./schoolImages/${request.headers.get("File-Name")}`,
         // `${process.cwd()}/public/schoolImages/${request.headers.get(
         //   "File-Name"
         // )}`,
