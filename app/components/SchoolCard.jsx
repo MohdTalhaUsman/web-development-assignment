@@ -1,9 +1,31 @@
 "use client";
 
 import React from "react";
+import { useEffect, useState } from "react";
 
 function SchoolCard({ schoolObject }) {
+  const [imageUrl, setImageUrl] = useState();
   const { address, city, image, name } = schoolObject;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const imageFetchResponse = await fetch("/api/upload/", {
+          headers: {
+            "File-Name": image,
+          },
+        });
+
+        if (!imageFetchResponse.ok)
+          throw new Error("Failed to fetch image from the directory.");
+        const imageBlob = await imageFetchResponse.blob();
+        setImageUrl(URL.createObjectURL(imageBlob));
+      } catch (error) {
+        console.log(error.message);
+      }
+    })();
+  }, []);
+
   return (
     <li
       className="w-[24em] h-[auto] rounded-[3em] bg-[rgba(217, 217, 217, 0.58)] border-[1px] border-white backdrop-blur-sm px-[1.6em]
@@ -14,8 +36,9 @@ function SchoolCard({ schoolObject }) {
           <img
             className="object-cover w-full h-full"
             // src={`${process.env.NEXT_PUBLIC_SCHOOL_IMAGES_DIR}${image}`}
-            src={`/tmp/${image}`}
-            // src={`${image}`}
+            // src={`/tmp/${image}`}
+            // src={}
+            src={imageUrl}
             alt={`${name} picture.`}
           />
         </div>

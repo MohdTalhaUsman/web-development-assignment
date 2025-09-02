@@ -1,7 +1,37 @@
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 const path = require("path");
 const fs = require("fs");
+
+export async function GET(request) {
+  try {
+    const fileReadResponse = await readFile(
+      `/tmp/${request.headers.get("File-Name")}`
+    );
+
+    // const imageBlob = new Blob(fileReadResponse);
+    // console.log("fileReadResponse");
+    // console.log(imageBlob);
+
+    // const fileReader = new FileReader();
+
+    // const file = await fileReader.readFile(
+    //   './tmp/${request.headers.get("File-Name")}'
+    // );
+
+    // console.log("file");
+    // console.log(file);
+
+    return new NextResponse(fileReadResponse, {
+      status: 200,
+      message: "Image read successfully!",
+    });
+  } catch (error) {
+    console.log(error.message);
+
+    return NextResponse.json({ error: error.message }, { status: 404 });
+  }
+}
 
 export async function POST(request) {
   try {
@@ -21,12 +51,12 @@ export async function POST(request) {
       // );
       // console.log(`${process.cwd()}/${request.headers.get("File-Name")}`);
 
-      try {
-        const filesSync = fs.readdirSync("/tmp");
-        console.log("Directory content before write (sync):", filesSync);
-      } catch (err) {
-        console.error("Error reading directory synchronously:", err);
-      }
+      // try {
+      //   const filesSync = fs.readdirSync("/tmp");
+      //   console.log("Directory content before write (sync):", filesSync);
+      // } catch (err) {
+      //   console.error("Error reading directory synchronously:", err);
+      // }
 
       await writeFile(
         // `./public/schoolImages/${request.headers.get("File-Name")}`,
@@ -38,12 +68,12 @@ export async function POST(request) {
         chunks
       );
 
-      try {
-        const filesSync = fs.readdirSync("/tmp");
-        console.log("Directory content after write (sync):", filesSync);
-      } catch (err) {
-        console.error("Error reading directory synchronously:", err);
-      }
+      // try {
+      //   const filesSync = fs.readdirSync("/tmp");
+      //   console.log("Directory content after write (sync):", filesSync);
+      // } catch (err) {
+      //   console.error("Error reading directory synchronously:", err);
+      // }
     } else {
       res.status(400).send("No blob data received.");
     }
