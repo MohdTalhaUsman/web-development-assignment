@@ -59,34 +59,39 @@ export default function Home() {
   }
 
   async function handleFormSubmit(formData) {
-    if (!selectedImageObject.url) return;
+    let imageFileName = null;
+    if (selectedImageObject.url) {
+      imageFileName = `${formData.schoolName.replaceAll(
+        " ",
+        "_"
+      )}${selectedImageObject.imageName.slice(
+        selectedImageObject.imageName.lastIndexOf(".")
+      )}`.toLowerCase();
 
-    const imageFileName = `${formData.schoolName.replaceAll(
-      " ",
-      "_"
-    )}${selectedImageObject.imageName.slice(
-      selectedImageObject.imageName.lastIndexOf(".")
-    )}`.toLowerCase();
+      const fetchBlobResponse = await fetch(selectedImageObject.url);
 
-    const fetchBlobResponse = await fetch(selectedImageObject.url);
+      if (!fetchBlobResponse.ok) {
+        throw new Error(
+          `Failed to fetch image: ${fetchBlobResponse.statusText}`
+        );
+      }
 
-    if (!fetchBlobResponse.ok) {
-      throw new Error(`Failed to fetch image: ${fetchBlobResponse.statusText}`);
-    }
+      const imageBlob = await fetchBlobResponse.blob();
 
-    const imageBlob = await fetchBlobResponse.blob();
+      const uploadBlobResponse = await fetch("/api/upload/", {
+        method: "POST",
+        body: imageBlob,
+        headers: {
+          "Content-Type": imageBlob.type,
+          "File-Name": imageFileName,
+        },
+      });
 
-    const uploadBlobResponse = await fetch("/api/upload/", {
-      method: "POST",
-      body: imageBlob,
-      headers: {
-        "Content-Type": imageBlob.type,
-        "File-Name": imageFileName,
-      },
-    });
-
-    if (!uploadBlobResponse.ok) {
-      throw new Error(`Failed to save image: ${uploadBlobResponse.statusText}`);
+      if (!uploadBlobResponse.ok) {
+        throw new Error(
+          `Failed to save image: ${uploadBlobResponse.statusText}`
+        );
+      }
     }
 
     const databaseWriteResponse = await fetch("/api/schools/", {

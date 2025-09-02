@@ -6,7 +6,9 @@ const fs = require("fs");
 export async function GET(request) {
   try {
     const fileReadResponse = await readFile(
-      `/tmp/schoolImages/${request.headers.get("File-Name")}`
+      `${process.env.NEXT_PUBLIC_SCHOOL_IMAGES_DIR}${request.headers.get(
+        "File-Name"
+      )}`
     );
 
     return new NextResponse(fileReadResponse, {
@@ -30,11 +32,15 @@ export async function POST(request) {
         chunks.push(value);
       }
 
-      if (!fs.existsSync("/tmp/schoolImages/"))
-        fs.mkdirSync("/tmp/schoolImages/", { recursive: true });
+      if (!fs.existsSync(process.env.NEXT_PUBLIC_SCHOOL_IMAGES_DIR))
+        fs.mkdirSync(process.env.NEXT_PUBLIC_SCHOOL_IMAGES_DIR, {
+          recursive: true,
+        });
 
       await writeFile(
-        `/tmp/schoolImages/${request.headers.get("File-Name")}`,
+        `${process.env.NEXT_PUBLIC_SCHOOL_IMAGES_DIR}${request.headers.get(
+          "File-Name"
+        )}`,
         chunks
       );
     } else {
