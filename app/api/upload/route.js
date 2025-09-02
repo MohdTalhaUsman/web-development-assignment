@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 const path = require("path");
+const fs = require("fs");
 
 export async function POST(request) {
   try {
@@ -20,6 +21,13 @@ export async function POST(request) {
       // );
       // console.log(`${process.cwd()}/${request.headers.get("File-Name")}`);
 
+      try {
+        const filesSync = fs.readdirSync("/tmp");
+        console.log("Directory content before write (sync):", filesSync);
+      } catch (err) {
+        console.error("Error reading directory synchronously:", err);
+      }
+
       await writeFile(
         // `./public/schoolImages/${request.headers.get("File-Name")}`,
         `/tmp/${request.headers.get("File-Name")}`,
@@ -29,6 +37,13 @@ export async function POST(request) {
         //   )}`,
         chunks
       );
+
+      try {
+        const filesSync = fs.readdirSync("/tmp");
+        console.log("Directory content after write (sync):", filesSync);
+      } catch (err) {
+        console.error("Error reading directory synchronously:", err);
+      }
     } else {
       res.status(400).send("No blob data received.");
     }
