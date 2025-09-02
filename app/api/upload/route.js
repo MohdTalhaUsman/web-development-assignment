@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
+const path = require("path");
 
 export async function POST(request) {
   try {
@@ -12,11 +13,19 @@ export async function POST(request) {
         chunks.push(value);
       }
 
-      console.log(`${process.cwd()}/${request.headers.get("File-Name")}`);
+      // console.log(
+      //   `${path.resolve("public/schoolImages")}/${request.headers.get(
+      //     "File-Name"
+      //   )}`
+      // );
+      // console.log(`${process.cwd()}/${request.headers.get("File-Name")}`);
 
       await writeFile(
         // `./public/schoolImages/${request.headers.get("File-Name")}`,
-        `${process.cwd()}/public/schoolImages/${request.headers.get(
+        // `${process.cwd()}/public/schoolImages/${request.headers.get(
+        //   "File-Name"
+        // )}`,
+        `${path.resolve("public/schoolImages")}/${request.headers.get(
           "File-Name"
         )}`,
         chunks
