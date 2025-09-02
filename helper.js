@@ -225,6 +225,9 @@ export async function turnHttpUrlToBlob(httpUrl) {
   try {
     const imageFetchResponse = await fetch(httpUrl, {
       credentials: "include",
+      headers: {
+        "File-Name": image,
+      },
     });
     if (!imageFetchResponse.ok)
       throw new Error("Failed to fetch image from the url.");

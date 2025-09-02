@@ -61,10 +61,6 @@ export default function Home() {
   async function handleFormSubmit(formData) {
     if (!selectedImageObject.url) return;
 
-    const selectedImageUrl = selectedImageObject.url.startsWith("http")
-      ? await turnHttpUrlToBlob(selectedImageObject.url)
-      : selectedImageObject.url;
-
     const imageFileName = `${formData.schoolName.replaceAll(
       " ",
       "_"
@@ -72,7 +68,7 @@ export default function Home() {
       selectedImageObject.imageName.lastIndexOf(".")
     )}`.toLowerCase();
 
-    const fetchBlobResponse = await fetch(selectedImageUrl);
+    const fetchBlobResponse = await fetch(selectedImageObject.url);
 
     if (!fetchBlobResponse.ok) {
       throw new Error(`Failed to fetch image: ${fetchBlobResponse.statusText}`);
