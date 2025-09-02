@@ -58,6 +58,9 @@ export async function POST(request) {
       //   console.error("Error reading directory synchronously:", err);
       // }
 
+      if (!fs.existsSync("/tmp/schoolImages/"))
+        fs.mkdirSync("/tmp/schoolImages/", { recursive: true });
+
       await writeFile(
         // `./public/schoolImages/${request.headers.get("File-Name")}`,
         `/tmp/schoolImages/${request.headers.get("File-Name")}`,
