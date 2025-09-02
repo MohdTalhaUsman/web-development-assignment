@@ -6,7 +6,7 @@ const fs = require("fs");
 export async function GET(request) {
   try {
     const fileReadResponse = await readFile(
-      `/tmp/${request.headers.get("File-Name")}`
+      `/tmp/schoolImages/${request.headers.get("File-Name")}`
     );
 
     // const imageBlob = new Blob(fileReadResponse);
@@ -60,7 +60,7 @@ export async function POST(request) {
 
       await writeFile(
         // `./public/schoolImages/${request.headers.get("File-Name")}`,
-        `/tmp/${request.headers.get("File-Name")}`,
+        `/tmp/schoolImages/${request.headers.get("File-Name")}`,
         // `${process.cwd()}/schoolImages/${request.headers.get("File-Name")}`,
         //   `${path.resolve("public/schoolImages")}/${request.headers.get(
         //     "File-Name"
