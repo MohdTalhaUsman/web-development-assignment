@@ -223,7 +223,9 @@ export const emailValidationRegex =
 
 export async function turnHttpUrlToBlob(httpUrl) {
   try {
-    const imageFetchResponse = await fetch(httpUrl);
+    const imageFetchResponse = await fetch(httpUrl, {
+      credentials: "include",
+    });
     if (!imageFetchResponse.ok)
       throw new Error("Failed to fetch image from the url.");
     const imageBlob = await imageFetchResponse.blob();

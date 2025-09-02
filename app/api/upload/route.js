@@ -14,6 +14,7 @@ export async function GET(request) {
       message: "Image read successfully!",
     });
   } catch (error) {
+    console.log(error.message);
     return NextResponse.json({ error: error.message }, { status: 404 });
   }
 }
