@@ -12,11 +12,7 @@ import {
 } from "@/helper";
 
 export default function Home() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const [selectedImageObject, setSelectedImageObject] = useState({});
   const [imageUrl, setImageUrl] = useState("");
@@ -65,6 +61,10 @@ export default function Home() {
   async function handleFormSubmit(formData) {
     if (!selectedImageObject.url) return;
 
+    const selectedImageUrl = selectedImageObject.url.startsWith("http")
+      ? await turnHttpUrlToBlob(selectedImageObject.url)
+      : selectedImageObject.url;
+
     const imageFileName = `${formData.schoolName.replaceAll(
       " ",
       "_"
@@ -72,7 +72,7 @@ export default function Home() {
       selectedImageObject.imageName.lastIndexOf(".")
     )}`.toLowerCase();
 
-    const fetchBlobResponse = await fetch(selectedImageObject.url);
+    const fetchBlobResponse = await fetch(selectedImageUrl);
 
     if (!fetchBlobResponse.ok) {
       throw new Error(`Failed to fetch image: ${fetchBlobResponse.statusText}`);
@@ -144,7 +144,7 @@ export default function Home() {
     if (imageFileName !== "" && isValidImageFormat(imageFileName)) {
       setSelectedImageObject({
         imageName: imageFileName,
-        url: turnHttpUrlToBlob(imageUrl),
+        url: imageUrl,
       });
     }
   }

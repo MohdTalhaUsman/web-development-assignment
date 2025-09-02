@@ -221,11 +221,14 @@ export const validImageFormats = [
 export const emailValidationRegex =
   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-export function turnHttpUrlToBlob(httpUrl) {
-  fetch(httpUrl)
-    .then((fetchResponse) => fetchResponse.blob())
-    .then((imageBlob) => {
-      return URL.createObjectURL(imageBlob);
-    })
-    .catch((error) => {});
+export async function turnHttpUrlToBlob(httpUrl) {
+  try {
+    const imageFetchResponse = await fetch(httpUrl);
+    if (!imageFetchResponse.ok)
+      throw new Error("Failed to fetch image from the url.");
+    const imageBlob = await imageFetchResponse.blob();
+    return URL.createObjectURL(imageBlob);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
