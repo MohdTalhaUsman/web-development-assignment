@@ -35,9 +35,6 @@ function SchoolCard({ schoolObject }) {
         <div className="rounded-[3em] h-auto w-full aspect-[1/1] overflow-hidden">
           <img
             className="object-cover w-full h-full"
-            // src={`${process.env.NEXT_PUBLIC_SCHOOL_IMAGES_DIR}${image}`}
-            // src={`/tmp/${image}`}
-            // src={}
             src={imageUrl}
             alt={`${name} picture.`}
           />

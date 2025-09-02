@@ -8,6 +8,7 @@ import {
   indianStatesAndUTs,
   validImageFormats,
   emailValidationRegex,
+  turnHttpUrlToBlob,
 } from "@/helper";
 
 export default function Home() {
@@ -141,10 +142,9 @@ export default function Home() {
   function handleUrlUpload() {
     const imageFileName = imageUrl.slice(imageUrl.lastIndexOf("/") + 1);
     if (imageFileName !== "" && isValidImageFormat(imageFileName)) {
-      // setSelectedImageUrl(imageUrl);
       setSelectedImageObject({
         imageName: imageFileName,
-        url: imageUrl,
+        url: turnHttpUrlToBlob(imageUrl),
       });
     }
   }
@@ -165,7 +165,6 @@ export default function Home() {
       !selectedImageObject.imageName ||
       selectedImageObject.imageName !== selectedFile.name
     ) {
-      // setSelectedImageUrl(URL.createObjectURL(selectedFile));
       setSelectedImageObject({
         imageName: selectedFile.name,
         url: URL.createObjectURL(selectedFile),
